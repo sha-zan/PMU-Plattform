@@ -1,6 +1,88 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <meta charset="UTF-8">
+  <title>PMU Fallplattform</title>
+</head>
+<body>
+  <h1>Radiologie Fallplattform</h1>
+
+  <div>
+    <h3>Neuen Fall speichern</h3>
+    <button onclick="saveTestCase()">Test-Fall speichern</button>
+  </div>
+
+  <hr>
+
+  <div>
+    <h3>Gespeicherte Fälle laden</h3>
+    <button onclick="loadCases()">Fälle laden</button>
+    <ul id="caseList"></ul>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+  <!-- Firebase Konfiguration -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "DEIN_API_KEY",
+      authDomain: "DEIN_PROJEKT.firebaseapp.com",
+      projectId: "DEIN_PROJEKT_ID",
+      storageBucket: "DEIN_PROJEKT.appspot.com",
+      messagingSenderId: "DEINE_SENDER_ID",
+      appId: "DEINE_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Plattform-Logik -->
+  <script>
+    // Testfall speichern
+    function saveTestCase() {
+      const newCase = {
+        title: "HCC Segment VII",
+        image: "data:image/png;base64,...", // Beispiel
+        question: "Was ist die wahrscheinlichste Diagnose?",
+        answers: ["HCC", "Zyste", "Metastase"],
+        correctAnswer: 0
+      };
+
+      db.collection("cases").add(newCase)
+        .then(docRef => {
+          alert("Fall gespeichert mit ID: " + docRef.id);
+        })
+        .catch(error => {
+          console.error("Fehler beim Speichern: ", error);
+        });
+    }
+
+    // Fälle laden
+    function loadCases() {
+      const caseList = document.getElementById("caseList");
+      caseList.innerHTML = "";
+
+      db.collection("cases").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const li = document.createElement("li");
+          li.textContent = `${data.title} – ${data.question}`;
+          caseList.appendChild(li);
+        });
+      }).catch(error => {
+        console.error("Fehler beim Laden: ", error);
+      });
+    }
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMU Fallstudienplattform</title>
