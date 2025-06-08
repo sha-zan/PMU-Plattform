@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMU Fallstudienplattform</title>
     <style>
+        <div id="fall-container"></div>
+
+<script>
+  fetch('Fallbeispiele.json')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('fall-container');
+      data.forEach(fall => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <h3>${fall.title}</h3>
+            <p><strong>Beschreibung:</strong> ${fall.description}</p>
+            <p><strong>Diagnose:</strong> ${fall.diagnosis}</p>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    });
+</script>
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
