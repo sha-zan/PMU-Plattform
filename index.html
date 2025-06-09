@@ -341,4 +341,56 @@
         }
     </script>
 </body>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD...JzU",
+    authDomain: "pmu-fallplattform.firebaseapp.com",
+    projectId: "pmu-fallplattform",
+    storageBucket: "pmu-fallplattform.appspot.com",
+    messagingSenderId: "497701253925",
+    appId: "1:497701253925:web:2ff56e29c0d3b19d07ff92"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🔘 FALL SPEICHERN
+  async function speichereFall() {
+    const titel = document.getElementById("titel").value;
+    const beschreibung = document.getElementById("beschreibung").value;
+
+    try {
+      const docRef = await addDoc(collection(db, "faelle"), {
+        titel,
+        beschreibung,
+        erstellt: new Date()
+      });
+      alert("Fall gespeichert mit ID: " + docRef.id);
+    } catch (e) {
+      console.error("Fehler beim Speichern:", e);
+    }
+  }
+
+  // 📋 FÄLLE LADEN
+  async function ladeFaelle() {
+    const faelleContainer = document.getElementById("faelleListe");
+    faelleContainer.innerHTML = ""; // Reset
+
+    const querySnapshot = await getDocs(collection(db, "faelle"));
+    querySnapshot.forEach((doc) => {
+      const fall = doc.data();
+      const div = document.createElement("div");
+      div.innerHTML = `<strong>${fall.titel}</strong><br>${fall.beschreibung}<hr>`;
+      faelleContainer.appendChild(div);
+    });
+  }
+
+  // Optional: Buttons verbinden (falls du IDs wie "btnSpeichern" und "btnLaden" hast)
+  document.getElementById("btnSpeichern").addEventListener("click", speichereFall);
+  document.getElementById("btnLaden").addEventListener("click", ladeFaelle);
+</script>
+
 </html>
