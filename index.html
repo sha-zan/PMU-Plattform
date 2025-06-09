@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html lang="de">
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD...JzU",
+    authDomain: "pmu-fallplattform.firebaseapp.com",
+    projectId: "pmu-fallplattform",
+    storageBucket: "pmu-fallplattform.appspot.com",
+    messagingSenderId: "497701253925",
+    appId: "1:497701253925:web:2ff56e29c0d3b19d07ff92"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Ab hier kannst du mit db arbeiten z. B.:
+  // await addDoc(collection(db, "faelle"), { titel: "Testfall", beschreibung: "..." });
+</script>
+
 <head>
   <meta charset="UTF-8">
   <title>PMU Fallplattform</title>
